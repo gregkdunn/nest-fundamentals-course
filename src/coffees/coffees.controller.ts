@@ -1,13 +1,12 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Res } from '@nestjs/common';
 
 @Controller('coffees')
 export class CoffeesController {
 
   @Get()
-  findAll(@Res() response) {
-    // Express.js example
-    response.status(200).send('This action returns all coffees');
-    /**    You can also use - HttpStatus.OK  */
+  findAll(@Query() paginationQuery) {
+    const { limit, offset } = paginationQuery;
+    return `This action returns the next ${limit} coffees offset at ${offset}`;;
   }
 
   @Get(':id')
