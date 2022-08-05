@@ -44,6 +44,7 @@ export class CoffeesService {
     if (existingCoffee) {
       // update the existing entity
     }
+    return updateCoffeeDto;
   }
 
   remove(id: string) {
