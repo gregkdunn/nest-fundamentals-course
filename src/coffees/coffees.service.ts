@@ -1,5 +1,12 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Coffee } from './coffee.entity';
+import { CreateCoffeeDto } from './dto/create-coffee.dto';
+import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 
 @Injectable()
 export class CoffeesService {
@@ -27,25 +34,23 @@ export class CoffeesService {
     return coffee;
   }
 
-  create(newCoffee: Coffee) {
+  create(newCoffee: CreateCoffeeDto) {
     const newId = this.newCoffeeId();
-    this.coffees = [
-      ...this.coffees,
-      { ...newCoffee, id: newId } /** Need to add the id */
-    ];
-    return this.findOne(`${newId}`);
+    this.coffees.push({ ...newCoffee, id: newId });
   }
 
-  update(id: string, updateCoffeeDto: Partial<Coffee>) {
-    this.coffees = this.coffees.map((coffee) => {
-      return coffee.id === +id ? { ...coffee, updateCoffeeDto } : coffee;
-    });
-    return this.findOne(id);
+  update(id: string, updateCoffeeDto: UpdateCoffeeDto) {
+    const existingCoffee = this.findOne(id);
+    if (existingCoffee) {
+      // update the existing entity
+    }
   }
 
   remove(id: string) {
-    this.coffees = this.coffees.filter((coffee: Coffee) => coffee.id !== +id);
-    return this.findAll();
+    const coffeeIndex = this.coffees.findIndex((item) => item.id === +id);
+    if (coffeeIndex >= 0) {
+      this.coffees.splice(coffeeIndex, 1);
+    }
   }
 
   newCoffeeId(): number {
