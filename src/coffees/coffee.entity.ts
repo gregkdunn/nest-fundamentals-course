@@ -18,8 +18,14 @@ export class Coffee {
   @Column()
   brand: string;
 
+  @Column({ nullable: true })
+  desecription: string;
+
   @Column()
   origin: string;
+
+  @Column({ default: 0 })
+  recommendations: number;
 
   /*
   @Column('json', { nullable: true })
