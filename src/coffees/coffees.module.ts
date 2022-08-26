@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Injectable, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Event } from 'src/events/entities/event.entity';
 import { Coffee } from './coffee.entity';
@@ -25,7 +25,7 @@ class ProductionConfigService {}
     CoffeesService,
     {
       provide: COFFEE_BRANDS, // 👈 Constant Token Name
-      useValue: ['Cool Beans', "Jittery Joe's", 'Rev'],
+      useFactory: () => ['Cool Beans', "Jittery Joe's", 'Rev'],
     },
   ],
   exports: [TypeOrmModule, CoffeesService],
