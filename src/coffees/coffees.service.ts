@@ -137,6 +137,4 @@ export class CoffeesService {
       await queryRunner.release();
     }
   }
-
-  private async transaction(callback: )
 }
