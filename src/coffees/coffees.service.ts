@@ -4,6 +4,7 @@ import {
   Inject,
   Injectable,
   NotFoundException,
+  Scope,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
@@ -15,7 +16,9 @@ import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Flavor } from './flavor.entity';
 
-@Injectable()
+//@Injectable({ scope: Scope.DEFAULT }) // 👈  Scope Default : Singleton - 1 to rule them all!
+//@Injectable({ scope: Scope.TRANSIENT }) // 👈  Scope Transient : Each Injection receives a new version of the service
+@Injectable({ scope: Scope.REQUEST }) // 👈  Scope Request : Each Request receives a new version of the service
 export class CoffeesService {
   /*
   private coffees: Coffee[] = [
@@ -37,7 +40,7 @@ export class CoffeesService {
     private readonly dataSource: DataSource,
     @Inject(COFFEE_BRANDS) coffeeBrands: string[],
   ) {
-    console.log(coffeeBrands);
+    console.log(' --- Coffee Service Instantiated --- ');
   }
 
   findAll(paginationQuery: PaginationQueryDto) {
