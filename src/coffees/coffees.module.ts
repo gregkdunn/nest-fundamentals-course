@@ -11,6 +11,13 @@ class ConfigService {}
 class DevelopmentConfigService {}
 class ProductionConfigService {}
 
+@Injectable()
+export class CoffeeBrandsFactory {
+  create() {
+    return ['Cool Beans', "Jittery Joe's", 'Rev'];
+  }
+}
+
 @Module({
   imports: [TypeOrmModule.forFeature([Coffee, Flavor, Event])], // 👈 Adding Coffee Entity here to TypeOrmModule.forFeature
   controllers: [CoffeesController],
@@ -23,9 +30,12 @@ class ProductionConfigService {}
           : ProductionConfigService,
     },
     CoffeesService,
+    CoffeeBrandsFactory,
     {
       provide: COFFEE_BRANDS, // 👈 Constant Token Name
-      useFactory: () => ['Cool Beans', "Jittery Joe's", 'Rev'],
+      useFactory: (brandsFactory: CoffeeBrandsFactory) =>
+        brandsFactory.create(),
+      inject: [CoffeeBrandsFactory],
     },
   ],
   exports: [TypeOrmModule, CoffeesService],
