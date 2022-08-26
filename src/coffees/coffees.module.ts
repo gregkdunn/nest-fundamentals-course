@@ -7,20 +7,26 @@ import { CoffeesController } from './coffees.controller';
 import { CoffeesService } from './coffees.service';
 import { Flavor } from './flavor.entity';
 
-export class MockCoffeesService {}
+class ConfigService {}
+class DevelopmentConfigService {}
+class ProductionConfigService {}
 
 @Module({
   imports: [TypeOrmModule.forFeature([Coffee, Flavor, Event])], // 👈 Adding Coffee Entity here to TypeOrmModule.forFeature
   controllers: [CoffeesController],
   providers: [
     {
-      provide: CoffeesService, // 👈 Token Name
-      useValue: new MockCoffeesService(), // 👈 Class
+      provide: ConfigService,
+      useClass:
+        process.env.NODE_ENV === 'development'
+          ? DevelopmentConfigService
+          : ProductionConfigService,
     },
+    CoffeesService,
     {
-      provide: COFFEE_BRANDS,// 👈 Constant Token Name
+      provide: COFFEE_BRANDS, // 👈 Constant Token Name
       useValue: ['Cool Beans', "Jittery Joe's", 'Rev'],
-    }
+    },
   ],
   exports: [TypeOrmModule, CoffeesService],
 })
