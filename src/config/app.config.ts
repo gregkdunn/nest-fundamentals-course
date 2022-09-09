@@ -4,5 +4,5 @@ export default () => ({
     host: process.env.DATABASE_HOST,
     port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
   },
-  //apikey: process.env.API_KEY,
+  API_KEY: process.env.API_KEY,
 });

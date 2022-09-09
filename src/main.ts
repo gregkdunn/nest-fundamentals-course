@@ -9,7 +9,8 @@ async function bootstrap() {
   // Globally Bound Pipe - useGlobalPipe
   //app.use
   app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalGuards(new ApiKeyGuard());
+  // Using module binding instead of the next line
+  //app.useGlobalGuards(new ApiKeyGuard());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
