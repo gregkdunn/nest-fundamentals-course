@@ -34,8 +34,7 @@ export class CoffeesController {
   // @UsePipes(ValidationPipe)
 
   // Standard MetaData
-  @SetMetadata('isPublic', true)
-
+  //@SetMetadata('isPublic', true)
   // Custom Decorator
   //@Public()
   @Get()
