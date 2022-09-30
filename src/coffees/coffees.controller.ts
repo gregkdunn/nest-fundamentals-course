@@ -13,6 +13,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
+import { ApiForbiddenResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { Protocol } from 'src/common/decorators/protocol.decorator';
 import { Public } from 'src/common/decorators/public.decorator';
@@ -25,6 +26,7 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 
 // Bind Pipe at Controller - Better to use Class instead of new Instance
 // @UsePipes(ValidationPipe)
+@ApiTags('Coffees')
 @Controller('coffees')
 export class CoffeesController {
   constructor(
@@ -40,8 +42,10 @@ export class CoffeesController {
   // Standard MetaData
   //@SetMetadata('isPublic', true)
   // Custom Decorator
-  //@Public()
 
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  // @ApiForbiddenResponse({description: 'Forbidden.'})
+  @Public()
   @Get()
   async findAll(
     @Protocol('ws') protocol: string,
