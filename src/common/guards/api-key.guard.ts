@@ -17,9 +17,9 @@ export class ApiKeyGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const isPublic = this.reflector.get(IS_PUBLIC_KEY, context.getHandler());
 
-    console.log('ApiKeyGuard.context', context);
-    console.log('ApiKeyGuard.context.getHandler', context.getHandler());
-    console.log('ApiKeyGuard.isPublic', isPublic);
+    //console.log('ApiKeyGuard.context', context);
+    //console.log('ApiKeyGuard.context.getHandler', context.getHandler());
+    //console.log('ApiKeyGuard.isPublic', isPublic);
     if (isPublic) {
       return true;
     }
@@ -28,7 +28,7 @@ export class ApiKeyGuard implements CanActivate {
     const authHeader = request.header('Authorization');
 
     console.log('ApiKeyGuard.api_key', this.configService.get('API_KEY'));
-    console.log('ApiKeyGuard.authHeader', authHeader);
+    //console.log('ApiKeyGuard.authHeader', authHeader);
 
     return authHeader === this.configService.get('API_KEY');
   }

@@ -49,7 +49,7 @@ export class CoffeeBrandsFactory {
         return coffeeBrands;
       },
       inject: [Connection],
-      scope: Scope.TRANSIENT,
+      scope: Scope.DEFAULT, // Scope.TRANSIENT,
     },
   ],
   exports: [TypeOrmModule, CoffeesService],
