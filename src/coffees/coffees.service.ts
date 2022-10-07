@@ -4,29 +4,29 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { Coffee } from './coffee.entity';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 
 @Injectable()
 export class CoffeesService {
-  private coffees: Coffee[] = [
-    {
-      id: 1,
-      name: 'Shipwreck Roast',
-      brand: 'Buddy Brew',
-      origin: 'Bermuda',
-      flavors: ['chocolate', 'vanilla'],
-    },
-  ];
+  constructor(
+    @InjectModel(Coffee.name) private readonly coffeeModel: Model<Coffee>,
+  ) {}
 
-  findAll() {
-    return this.coffees;
+  findAll(paginationQuery: PaginationQueryDto) {
+    const { limit, offset } = paginationQuery;
+    return this.coffeeModel.find().skip(offset).limit(limit).exec();
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     // throw 'a random error';
-    const coffee: Coffee = this.coffees.find((coffee) => coffee.id === +id);
+    //const coffee: Coffee = this.coffees.find((coffee) => coffee.id === +id);
+    const coffee: Coffee = await this.coffeeModel.findOne({ _id: id });
+
     if (!coffee) {
       // throw new HttpException(`Coffee #${id} not found`, HttpStatus.NOT_FOUND);
       throw new NotFoundException(`Coffee #${id} not found`);
@@ -35,26 +35,23 @@ export class CoffeesService {
   }
 
   create(newCoffee: CreateCoffeeDto) {
-    const newId = this.newCoffeeId();
-    this.coffees.push({ ...newCoffee, id: newId });
+    const coffee = new this.coffeeModel(newCoffee);
+    return coffee.save();
   }
 
-  update(id: string, updateCoffeeDto: UpdateCoffeeDto) {
-    const existingCoffee = this.findOne(id);
-    if (existingCoffee) {
-      // update the existing entity
+  async update(id: string, updateCoffeeDto: UpdateCoffeeDto) {
+    const existingCoffee = await this.coffeeModel
+      .findOneAndUpdate({ _id: id }, { $set: updateCoffeeDto }, { new: true }) // $set: {} - updated params // new: boolean - should return the new object
+      .exec();
+
+    if (!existingCoffee) {
+      throw new NotFoundException(`Coffee #${id} not found`);
     }
-    return updateCoffeeDto;
+    return existingCoffee;
   }
 
-  remove(id: string) {
-    const coffeeIndex = this.coffees.findIndex((item) => item.id === +id);
-    if (coffeeIndex >= 0) {
-      this.coffees.splice(coffeeIndex, 1);
-    }
-  }
-
-  newCoffeeId(): number {
-    return this.coffees.length + 1;
+  async remove(id: string) {
+    const coffee = await this.findOne(id);
+    return coffee.remove();
   }
 }

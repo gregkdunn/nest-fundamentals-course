@@ -18,7 +18,7 @@ export class CoffeesController {
 
   @Get()
   findAll(@Query() paginationQuery) {
-    return this.coffeesService.findAll();
+    return this.coffeesService.findAll(paginationQuery);
   }
 
   @Get(':id')
