@@ -7,7 +7,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   // Custom Decorator
-  @Public()
+  // @Public()
   @Get()
   getHello(): string {
     return this.appService.getHello();

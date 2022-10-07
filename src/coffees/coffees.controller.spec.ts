@@ -24,7 +24,7 @@ describe('CoffeesController', () => {
   });
 
   it('should be defined', () => {
-    service.findAll.mockReturnValue({this: true});
+    service.findAll.mockReturnValue({ this: true });
 
     expect(controller).toBeDefined();
   });
